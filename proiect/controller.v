@@ -24,7 +24,7 @@ always @(*)begin
     end else begin
         op <= instruction [31:26];  
     case(op)
-        6'b000000: begin 
+        6'b000000: begin //add, sub, and, or, xor, nor (R-type)
             RegDst <= 1;
             Jump <=0;
             Branch <=0;
@@ -35,9 +35,38 @@ always @(*)begin
             AluSrc <=0;
             regWrite <=1;
         end
-        // 6'b100011://lw
-        // 6'b101011://sw
-        // 6'b001000: // addi
+        6'b100011:begin //lw
+            RegDst <=0;
+            Jump<=0;
+            Branch <=0;
+            MemRead <= 1;
+            MemtToReg <= 1;
+            AluOp <=1;
+            AluSrc <=1;
+            regWrite<=1;
+        end
+        6'b101011:begin  //sw
+            RegDst <=0;
+            Jump <=0;
+            Branch <=0;
+            MemRead <=0;
+            MemtToReg <=0;
+            AluOp <=1;
+            AluSrc <=1;
+            regWrite <=0;
+        end 
+        6'b001000: begin //addi
+            RegDst <= 0;
+            Jump <= 0;
+            Branch <=0;
+            MemRead <=0;
+            MemtToReg <=0;
+            AluOp <=1;
+            AluSrc <=1;
+            MemWrite <=0;
+            regWrite <=1;
+
+        end
         // 6'b001100: //andi
         // 6'b001101: //ori
         // 6'b000100: //beq

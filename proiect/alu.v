@@ -20,8 +20,11 @@ module alu(input wire [31:0] op1,
                 end
             end
             6'b100110: result <= op1 ^ op2;//xor
-
-            default: result <= op1 + op2;//addi
+            6'b001000: result <= op1 + op2;//addi
+            6'b001100: result <= op1 & op2;//andi
+            6'b100011: result <= op1 + op2;//lw
+            6'b101011: result <= op1 + op2;//sw
+            default: result <= op1 + op2;
         endcase 
     end
     assign zero = (result == 32'b0);

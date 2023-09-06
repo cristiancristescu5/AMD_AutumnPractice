@@ -5,7 +5,7 @@ module register_file(input wire clk,
                     input wire regWrite,//semnal ce indica scrierea in registrul destinatie
                     input wire [31:0] dataWrite,//rezultat
                     output reg [31:0] reg1,//continut regs
-                    output reg [31:0] reg2//continut regd
+                    output reg [31:0] reg2//continut regt
                     );//front pozitiv, scriere la front positiv regWrite
 reg [31:0] [31:0] registerMemory;
 
