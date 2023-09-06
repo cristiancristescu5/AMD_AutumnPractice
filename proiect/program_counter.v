@@ -12,8 +12,4 @@ always @(posedge clk, nextInstruction)begin
         currentInstruction <= instruction;
     end
 end
-// always @(posedge reset)begin 
-//     instruction <= 32'b0;
-//     currentInstruction <= 32'b0;
-// end
 endmodule
