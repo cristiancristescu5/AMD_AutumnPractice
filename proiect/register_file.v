@@ -15,7 +15,7 @@ always @(posedge clk, regs, regt, regd, posedge regWrite) begin
         reg2 <= registerMemory[regt];
     end
 end
-always @(posedge clk, posedge regWrite, dataWrite, regd)begin 
+always @(posedge clk , posedge regWrite, dataWrite, regd)begin 
     if(regd <= 5'b11111) begin
         registerMemory[regd]<=dataWrite;
     end
