@@ -1,4 +1,4 @@
-module sign_extend(input wire [15:0] instr,
+module sign_extend(input wire [31:0] instr,
                     output wire [31:0] extension);
-    assign extension = {{16{instr[15]}}, instr};
+    assign extension = {{16{instr[15]}}, instr[15:0]};
 endmodule
