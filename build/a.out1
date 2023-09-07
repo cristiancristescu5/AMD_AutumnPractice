@@ -1,24 +1,16 @@
-**** module/scope: alu
+**** module/scope: controller
      Flip-Flops   : 0
-     Logic Gates  : 1473
-     ADDER[32]: 5 units
-     EQUALITY[32]: 13 units
-     MAGNITUDE[32]: 1 units
-     MUX[2]: 32 slices
-     LPM[5]: 3 unaccounted
-     LPM[8]: 1 unaccounted
-     LPM[40]: 1 unaccounted
-     LOG[13]: 2 unaccounted
+     Logic Gates  : 28
+     MUX[2]: 9 slices
+     LPM[5]: 18 unaccounted
+     LPM[40]: 10 unaccounted
+     LOG[13]: 10 unaccounted
      LOG[14]: 1 unaccounted
 **** TOTALS
      Flip-Flops   : 0
-     Logic Gates  : 1473
-     ADDER[32]: 5 units
-     EQUALITY[32]: 13 units
-     MAGNITUDE[32]: 1 units
-     MUX[2]: 32 slices
-     LPM[5]: 3 unaccounted
-     LPM[8]: 1 unaccounted
-     LPM[40]: 1 unaccounted
-     LOG[13]: 2 unaccounted
+     Logic Gates  : 28
+     MUX[2]: 9 slices
+     LPM[5]: 18 unaccounted
+     LPM[40]: 10 unaccounted
+     LOG[13]: 10 unaccounted
      LOG[14]: 1 unaccounted

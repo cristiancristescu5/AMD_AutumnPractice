@@ -89,8 +89,17 @@ always @(*)begin
             MemRead <= 0;
             MemWrite <= 0;
         end
-        // 6'b000100: //beq
-        // 6'b000101: //bne
+        6'b000100: begin//beq 
+            RegDst <= 0;
+            Jump <= 0;
+            Branch <=1;
+            MemRead <=0;
+            MemtToReg <=0;
+            AluOp <=1;
+            AluSrc <=1;
+            MemWrite <=0;
+            regWrite <=0;
+        end
         6'b000010: begin //jump 
             RegDst <= 0;
             AluSrc <= 0;
@@ -102,7 +111,6 @@ always @(*)begin
             MemRead <= 0;
             MemWrite <= 0;
         end
-        // 6'b000011: //jal 
     endcase
     end
 end
