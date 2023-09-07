@@ -91,7 +91,17 @@ always @(*)begin
         end
         // 6'b000100: //beq
         // 6'b000101: //bne
-        // 6'b000010: //j0
+        6'b000010: begin //jump 
+            RegDst <= 0;
+            AluSrc <= 0;
+            AluOp <=0;
+            Jump <=1;
+            Branch <= 0;
+            regWrite <= 0;
+            MemtToReg <= 0;
+            MemRead <= 0;
+            MemWrite <= 0;
+        end
         // 6'b000011: //jal 
     endcase
     end
