@@ -1,16 +1,6 @@
-**** module/scope: controller
+**** module/scope: sign_extend
      Flip-Flops   : 0
-     Logic Gates  : 28
-     MUX[2]: 9 slices
-     LPM[5]: 18 unaccounted
-     LPM[40]: 10 unaccounted
-     LOG[13]: 10 unaccounted
-     LOG[14]: 1 unaccounted
+     Logic Gates  : 0
 **** TOTALS
      Flip-Flops   : 0
-     Logic Gates  : 28
-     MUX[2]: 9 slices
-     LPM[5]: 18 unaccounted
-     LPM[40]: 10 unaccounted
-     LOG[13]: 10 unaccounted
-     LOG[14]: 1 unaccounted
+     Logic Gates  : 0
