@@ -67,11 +67,31 @@ always @(*)begin
             regWrite <=1;
 
         end
-        // 6'b001100: //andi
-        // 6'b001101: //ori
+        6'b001100: begin//andi 
+            RegDst <= 0;
+            AluSrc <= 1;
+            AluOp <=1;
+            Jump <=0;
+            Branch <= 0;
+            regWrite <= 1;
+            MemtToReg <= 0;
+            MemRead <= 0;
+            MemWrite <= 0;
+        end 
+        6'b001101: begin//ori
+            RegDst <= 0;
+            AluSrc <= 1;
+            AluOp <=1;
+            Jump <=0;
+            Branch <= 0;
+            regWrite <= 1;
+            MemtToReg <= 0;
+            MemRead <= 0;
+            MemWrite <= 0;
+        end
         // 6'b000100: //beq
         // 6'b000101: //bne
-        // 6'b000010: //j
+        // 6'b000010: //j0
         // 6'b000011: //jal 
     endcase
     end
