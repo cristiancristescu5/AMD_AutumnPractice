@@ -1,3 +1,4 @@
+// Code your design here
 `include "program_counter.v"
 `include "add.v"
 `include "add_32.v"
@@ -8,11 +9,10 @@
 `include "alu_controller.v"
 `include "alu.v"
 `include "memory.v"
-`include "add_32.v"
 `include "concatenator.v"
 `include "left_shift.v"
 `include "controller.v"
-`include "jump_address"
+`include "jump_address.v"
 module MIPS_processor(input wire clk, input wire reset);
     wire [31:0] nextInstruction;
     wire [31:0] currentInstruction;
@@ -91,7 +91,7 @@ module MIPS_processor(input wire clk, input wire reset);
                                 .sel(MemToReg),
                                 .res(dataAluMem));
     controller controllerDUt(.instruction(instruction),
-                            .RegDst(RegDst),
+                             .RegDst(regDst),
                             .reset(reset),
                             .Jump(Jump),
                             .Branch(Branch),
@@ -99,13 +99,13 @@ module MIPS_processor(input wire clk, input wire reset);
                             .AluOp(ALUop),
                             .MemWrite(MemWrite),
                             .AluSrc(AluSrc),
-                            .RegWrite(RegWrite)
+                            .regWrite(RegWrite)
                             );
     wire [27:0] jumpAddr;
     jump_address jump_addressDUT(.address(instruction),
                                 .extended(jumpAddr));
     wire [31:0] finalJ;
-    concatenator concatenatorDUT(.shiftaddr(jumpAddr),
+    concat concatenatorDUT(.shiftaddr(jumpAddr),
                                 .addr(newAddress),
                                 .finalAddr(finalJ));
     wire [31:0] immAddr;
@@ -113,7 +113,7 @@ module MIPS_processor(input wire clk, input wire reset);
                             .newAddr(immAddr));
     wire [31:0] add32Out;
     addFull addFullDUT(.a(newAddress),
-                        .b(immAddr),
+                        .b(immAddr),	
                         .sum(add32Out));
     wire andOut;
     assign andOut = Branch & Zero;
@@ -122,8 +122,8 @@ module MIPS_processor(input wire clk, input wire reset);
                                     .sel2(add32Out),
                                     .sel(andOut),
                                     .res(mux324Out));
-    mux #(.WIDTH(32)) muxAddr (.sel1(mux324Out),
-                                .sel2(newAddress),
+  mux #(.WIDTH(32)) muxAddr (.sel1(mux324Out),
+                             .sel2(newAddress),
                                 .sel(Jump),
                                 .res(nextInstruction));
 endmodule
