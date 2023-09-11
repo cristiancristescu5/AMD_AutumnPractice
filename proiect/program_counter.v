@@ -7,7 +7,7 @@ initial begin
     instruction <= 32'b0;
     currentInstruction <= 32'b0;
 end
-always @(posedge clk, nextInstruction)begin
+always @(posedge clk)begin
     if(reset)begin 
         instruction <= 32'b0;
         currentInstruction <= 32'b0;
