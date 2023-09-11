@@ -10,7 +10,7 @@ initial begin
         end
     index <= 32'b0;
 end
-always @(readAdress, posedge clk)begin 
+always @(posedge clk)begin 
     if(reset)begin 
         for( index = 0 ; index < SIZE ; index = index+1) begin
                 instructions[index] = 0;
@@ -18,7 +18,7 @@ always @(readAdress, posedge clk)begin
         index <= 32'b0;
     end else begin 
         if(readAdress/(32'h4) <= SIZE-1)begin 
-            instruction <= instructions[readAdress/4];
+            instruction <= instructions[readAdress/32'h4];
         end else begin 
             instruction <= instructions[32'b0];
         end
