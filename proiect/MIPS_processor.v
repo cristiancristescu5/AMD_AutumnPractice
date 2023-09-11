@@ -122,8 +122,8 @@ module MIPS_processor(input wire clk, input wire reset);
                                     .sel2(add32Out),
                                     .sel(andOut),
                                     .res(mux324Out));
-    mux #(.WIDTH(32)) muxAddr (.sel1(newAddr),
-                                .sel2(mux324Out),
+    mux #(.WIDTH(32)) muxAddr (.sel1(mux324Out),
+                                .sel2(newAddress),
                                 .sel(Jump),
                                 .res(nextInstruction));
 endmodule
