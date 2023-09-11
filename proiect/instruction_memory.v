@@ -2,7 +2,7 @@ module instruction_memory#(parameter SIZE = 128)(input wire [31:0] readAdress,
                             input wire clk,
                             input wire reset,
                             output reg [31:0] instruction);
-reg [31:0] [SIZE-1:0] instructions;
+reg [31:0] instructions [0 : SIZE-1];
 reg [31:0] index;
 initial begin 
     for(index = 0 ; index < SIZE ; index = index + 1)begin 

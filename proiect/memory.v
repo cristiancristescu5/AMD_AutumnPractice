@@ -5,7 +5,7 @@ module memory #(parameter SIZE = 32)(input wire [31:0] address,
                                     input wire memR,
                                     input wire reset,
                                     output reg [31:0] readData);
-reg [SIZE-1 : 0] [31 : 0] memory;
+reg [31 : 0] memory [0 : SIZE-1];
 reg [31:0] index;
 initial begin 
     for(index = 0 ; index < SIZE ; index = index + 1)begin 
