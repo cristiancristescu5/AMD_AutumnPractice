@@ -5,8 +5,9 @@ module alu(input wire [31:0] op1,
             output reg [31:0] result);
     
     always @(*)begin
-        // zero <= ((op1==32'b0) && (op2 == 32'b0));
-        case(selection)
+         
+
+      case(selection)
             6'b100000:begin 
                  result <= op1 + op2;
                  zero <= result == 32'b0;
@@ -59,9 +60,10 @@ module alu(input wire [31:0] op1,
                 result <= op1 == op2; 
                 zero <= ~(op1 == op2);
                 end// beq (0 sau 1)
-            default: result <= op1 + op2;
-        endcase 
+            default: begin 
+              result <= op1 + op2;
+              zero <= result == 32'b0;
+            end
+         endcase 
     end
-    // assign zero = (result == 32'b0); 
-    // assign zero = ~(op1 == op2);
 endmodule
