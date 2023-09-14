@@ -1,6 +1,20 @@
-**** module/scope: sign_extend
+**** module/scope: instruction_memory
      Flip-Flops   : 0
-     Logic Gates  : 0
+     Logic Gates  : 193
+     EQUALITY[32]: 1 units
+     MAGNITUDE[32]: 1 units
+     MUX[2]: 32 slices
+     LPM[12]: 3 unaccounted
+     LPM[30]: 2 unaccounted
+     LOG[13]: 1 unaccounted
+     LOG[14]: 1 unaccounted
 **** TOTALS
      Flip-Flops   : 0
-     Logic Gates  : 0
+     Logic Gates  : 193
+     EQUALITY[32]: 1 units
+     MAGNITUDE[32]: 1 units
+     MUX[2]: 32 slices
+     LPM[12]: 3 unaccounted
+     LPM[30]: 2 unaccounted
+     LOG[13]: 1 unaccounted
+     LOG[14]: 1 unaccounted

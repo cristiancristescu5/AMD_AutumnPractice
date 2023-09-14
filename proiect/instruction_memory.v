@@ -13,20 +13,16 @@ initial begin
   instructions[1] <= 32'h00642820;
   instructions[2] <= 32'hae010000;
   instructions[3] <= 32'h8e040000;
-  	
+  instructions[4] <= 32'h20310099;
+  instructions[5] <= 32'h08000008;
+  instructions[8] <= 32'h10010001;
+  instructions[10] <= 32'h00011020;
 end
-  always @(posedge clk, posedge reset)begin 
-    if(reset)begin 
-        for( index = 0 ; index < SIZE ; index = index+1) begin
-          instructions[index] = 32'b0;
-        end
-        index <= 32'b0;
-    end else begin 
+  always @(*) begin 
       if(readAdress/(32'h4) <= SIZE-1 && instructions[readAdress/32'h4] != 32'b0)begin 
             instruction <= instructions[readAdress/32'h4];
         end else begin 
             instruction <=32'bx;
         end
-    end
-end
+  end
 endmodule

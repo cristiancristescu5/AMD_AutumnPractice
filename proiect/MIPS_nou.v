@@ -122,7 +122,7 @@ mux #(.WIDTH(32)) aluMemMux(.sel0(aluOut),
                             .res(aluMemData));
 add add4(.address(currentAddress),
         .newAddress(address4));
-jump_address jumpadd(.address(currentAddress),
+  jump_address jumpadd(.address(currentInstruction),
                     .extended(shiftJump));
 
 concat concatMod(.shiftaddr(shiftJump),

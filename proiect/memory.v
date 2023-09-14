@@ -27,6 +27,6 @@ always @(posedge clk)begin
         memory[address] <= data;
       end
     end
-  $display("la 0: %h", memory[0]);
+//   $display("la 0: %h", memory[0]);
 end
 endmodule
