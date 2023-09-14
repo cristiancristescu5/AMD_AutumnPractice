@@ -5,7 +5,7 @@ module program_counter(input wire clk,
   initial begin 
     currentInstruction <= 32'b0;
 end
-always @(posedge clk)begin
+always @(posedge clk, posedge reset)begin
     if(reset)begin 
         currentInstruction <= 32'b0;
     end else begin 
