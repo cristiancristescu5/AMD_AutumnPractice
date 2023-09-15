@@ -1,69 +1,59 @@
 module alu(input wire [31:0] op1,
             input wire [31:0] op2,
             input wire [5:0] selection,
-            output reg zero,
+            output wire zero,
             output reg [31:0] result);
     
     always @(*)begin
-         
-
       case(selection)
             6'b100000:begin 
                  result <= op1 + op2;
-                 zero <= result == 32'b0;
-                 end//add
+                  end//add
             6'b100010:begin
                  result <= op1 - op2;
-                 zero <= result == 32'b0;
-                 end//sub
+                  end//sub
             6'b100100:begin
                  result <= op1 & op2;
-                 zero <= result == 32'b0;
-                 end//and
+                  end//and
             6'b100101:begin
                  result <= op1 | op2;                 
-                 zero <= result == 32'b0;
-                 end//or
+                  end//or
             6'b100111:begin 
                 result <= ~(op1 | op2);
-                zero <= result == 32'b0;
-                end//nor
+                 end//nor
             6'b101010:begin //slt
                 if(op1 < op2) begin 
-                    result <=1;
+                    result <=32'b1;
                 end else begin 
-                    result <=0;
+                    result <=32'b0;
                 end
-                zero <= result == 32'b0;
-            end
+             end
             6'b100110:begin
                  result <= op1 ^ op2;
-                 zero <= result == 32'b0;
-                 end//xor
+                  end//xor
             6'b001000:begin 
                 result <= op1 + op2;
-                zero <= result == 32'b0;
-                end//addi
+                 end//addi
             6'b001100:begin
                  result <= op1 & op2;
-                 zero <= result == 32'b0;
-                 end//andi
+                  end//andi
             6'b100011:begin 
                 result <= op1 + op2;
-                zero <= result == 32'b0;
-                end//lw
+                 end//lw
             6'b101011:begin
                  result <= op1 + op2;
-                 zero <= result == 32'b0;
-                 end//sw
+                  end//sw
             6'b000100: begin 
-                result <= op1 == op2; 
-                zero <= ~(op1 == op2);
-                end// beq (0 sau 1)
+              if(op1 == op2)begin 
+                result <= 32'b0;
+              end else begin 
+                result <= 32'b01;
+              end
+                 end// beq (0 sau 1)
             default: begin 
               result <= op1 + op2;
-              zero <= result == 32'b0;
-            end
+             end
          endcase 
     end
+  assign zero = (result == 32'b0) ? 1'b1 : 1'b0;
 endmodule

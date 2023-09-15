@@ -1,7 +1,4 @@
 module add(input wire [31:0] address,
-            output reg [31:0] newAddress);
-
-always @(address) begin 
-    newAddress <= address + 32'h4;
-end
+            output wire [31:0] newAddress);
+	assign newAddress = address + 3'b100;
 endmodule

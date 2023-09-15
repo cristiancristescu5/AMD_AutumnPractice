@@ -1,4 +1,3 @@
-// Code your design here
 `include "program_counter.v"
 `include "add.v"
 `include "add_32.v"
@@ -13,117 +12,134 @@
 `include "left_shift.v"
 `include "controller.v"
 `include "jump_address.v"
-module MIPS_processor(input wire clk, input wire reset);
-    wire [31:0] nextInstruction;
-    wire [31:0] currentInstruction;
-    wire [31:0] newAddress;
-    wire [31:0] instruction;
-    wire regDst;
-    wire Jump;
-    wire Branch;
-    wire MemRead;
-    wire MemToReg;
-    wire ALUop;
-    wire MemWrite;
-    wire AluSrc;
-    wire RegWrite;
-    wire Zero;
-    program_counter program_counterDUT(
-        .clk(clk),
-        .reset(reset),
-        .nextInstruction(nextInstruction),
-        .currentInstruction(currentInstruction)
-    );
-    add addDUT(.address(currentInstruction),
-                .newAddress(newAddress));
-    instruction_memory instruction_memoryDUT(.readAdress(currentInstruction),
-                                            .clk(clk),
-                                            .reset(reset),
-                                            .instruction(instruction)
-                                            );
-    wire [4:0] regD;
-    mux #(.WIDTH(5)) mux_reg (.sel1(instruction[20:16]),
-                            .sel2(instruction[15:11]),
-                            .sel(regDst),
-                            .res(regD));
-    wire [31:0] dataAluMem;
-    wire [31:0] fromRegS;
-    wire [31:0] fromRegT;
-    register_file register_fileDUT(.clk(clk),
-                                    .regs(instruction[25:21]),
-                                    .regt(instruction[20:16]),
-                                    .regd(regD),
-                                    .regWrite(RegWrite),
-                                    .reset(reset),
-                                    .dataWrite(dataAluMem),
-                                    .reg1(fromRegS),
-                                    .reg2(fromRegT));
-    wire [31:0] imm;
-    sign_extend sign_extendDUT(.instr(instruction),
-                                .extension(imm));
-    wire [5:0] aluSelection;
-    alu_controller alu_controllerDUT(.ALUOp(ALUop),
-                                        .AluSrc(AluSrc),
-                                        .instruction(instruction),
-                                        .selection(aluSelection));
-    wire [31:0] aluMuxOut;
-    mux #(.WIDTH(32)) aluMux(.sel1(fromRegT),
-                            .sel2(imm),
-                            .sel(AluSrc),
-                            .res(aluMuxOut));
-    wire [31:0] aluResult;
-    alu aluDUT(.op1(fromRegS),
-                .op2(aluMuxOut),
+module mips(input wire clk,
+            input wire reset,
+            output wire [31 : 0] address,
+            output wire [31 : 0] result,
+            output wire [31:0] instruction
+           	);
+wire regDst;
+wire regWrite;
+wire jump;
+wire branch;
+wire memRead;
+wire memToReg;
+  wire[1:0] aluOp;
+wire memWrite;
+wire aluSrc;
+wire zero;
+wire andOut;
+
+wire [31:0] fromMemory; 
+wire [31:0] aluOut;
+wire [31:0] currentAddress;
+wire [31:0] nextAddress;
+wire [31:0] currentInstruction;
+wire [4:0] regDest;
+wire [31:0] aluMemData;
+wire [31:0] reg1, reg2;
+wire [31:0] immext;
+wire [5:0] aluSelection;
+wire [31:0] aluIn2;
+wire [31:0] address4;
+wire [27:0] shiftJump;
+wire [31:0] finalJump; 
+wire [31:0] immAdd;
+wire [31:0] immAdd4;
+wire [31:0] immMuxOut;
+  wire [31:0] nextTmp;
+  
+  assign nextTmp = nextAddress;
+  assign address = currentAddress;
+  assign result = aluMemData;
+  
+mux #(.WIDTH(32)) muxFinalAdd(.sel0(immMuxOut),
+                            .sel1(finalJump),
+                            .sel(jump),
+                            .res(nextAddress));
+program_counter prog(.clk(clk),
+                    .reset(reset),
+                     .nextInstruction(nextAddress),
+                    .currentInstruction(currentAddress));
+  instruction_memory #(.SIZE(18)) imem(.readAdress(currentAddress),
+                                        .clk(clk),
+                                        .reset(reset),
+                                        .instruction(currentInstruction));
+  assign instruction = currentInstruction;
+controller control(.instruction(currentInstruction),
+                    .RegDst(regDst),
+                    .reset(reset),
+                    .Jump(jump),
+                    .Branch(branch),
+                    .MemRead(memRead),
+                    .MemtToReg(memToReg),
+                    .AluOp(aluOp),
+                    .MemWrite(memWrite),
+                    .AluSrc(aluSrc),
+                    .regWrite(regWrite));
+
+
+mux #(.WIDTH(5)) muxReg (.sel0(currentInstruction[20:16]),
+                        .sel1(currentInstruction[15:11]),
+                        .sel(regDst),
+                        .res(regDest));
+register_file regFile(.clk(clk),
+                        .regs(currentInstruction[25:21]),
+                        .regt(currentInstruction[20:16]),
+                        .regd(regDest),
+                        .regWrite(regWrite),
+                        .reset(reset),
+                        .dataWrite(aluMemData),
+                        .reg1(reg1),
+                        .reg2(reg2));
+
+sign_extend se(.instr(currentInstruction),
+                .extension(immext));
+  alu_controller aluControl(.ALUOp(aluOp),
+                            .instruction(currentInstruction),
+                            .selection(aluSelection));
+
+mux #(.WIDTH(32)) aluMux(.sel0(reg2),
+                        .sel1(immext),
+                        .sel(aluSrc),
+                        .res(aluIn2));
+
+alu aluModule(.op1(reg1),
+                .op2(aluIn2),
                 .selection(aluSelection),
-                .zero(Zero),
-                .result(aluResult));
-    wire [31:0] fromMemory;
-    memory #(.SIZE(128)) memoryDUT(.address(aluResult),
-                                    .data(fromRegT),
-                                    .clk(clk),
-                                    .memW(MemWrite),
-                                    .memR(MemRead),
-                                    .reset(reset),
-                                    .readData(fromMemory)
-                                    );
-    mux #(.WIDTH(32)) memoryMux(.sel1(fromMemory),
-                                .sel2(aluResult),
-                                .sel(MemToReg),
-                                .res(dataAluMem));
-    controller controllerDUt(.instruction(instruction),
-                             .RegDst(regDst),
+                .zero(zero),
+                .result(aluOut));
+
+memory #(.SIZE(128)) dataMem(.address(aluOut),
+                            .data(reg2),
+                            .clk(clk),
+                            .memW(memWrite),
+                            .memR(memRead),
                             .reset(reset),
-                            .Jump(Jump),
-                            .Branch(Branch),
-                            .MemRead(MemRead),
-                            .AluOp(ALUop),
-                            .MemWrite(MemWrite),
-                            .AluSrc(AluSrc),
-                            .regWrite(RegWrite)
-                            );
-    wire [27:0] jumpAddr;
-    jump_address jump_addressDUT(.address(instruction),
-                                .extended(jumpAddr));
-    wire [31:0] finalJ;
-    concat concatenatorDUT(.shiftaddr(jumpAddr),
-                                .addr(newAddress),
-                                .finalAddr(finalJ));
-    wire [31:0] immAddr;
-    left_shift left_shiftDUT(.addr(imm),
-                            .newAddr(immAddr));
-    wire [31:0] add32Out;
-    addFull addFullDUT(.a(newAddress),
-                        .b(immAddr),	
-                        .sum(add32Out));
-    wire andOut;
-    assign andOut = Branch & Zero;
-    wire [31:0] mux324Out;
-    mux #(.WIDTH(32)) muxAdd32Add4 (.sel1(newAddress),
-                                    .sel2(add32Out),
-                                    .sel(andOut),
-                                    .res(mux324Out));
-  mux #(.WIDTH(32)) muxAddr (.sel1(mux324Out),
-                             .sel2(newAddress),
-                                .sel(Jump),
-                                .res(nextInstruction));
-endmodule
+                            .readData(fromMemory));
+mux #(.WIDTH(32)) aluMemMux(.sel0(aluOut),
+                            .sel1(fromMemory),
+                            .sel(memToReg),
+                            .res(aluMemData));
+add add4(.address(currentAddress),
+        .newAddress(address4));
+  jump_address jumpadd(.address(currentInstruction),
+                    .extended(shiftJump));
+
+concat concatMod(.shiftaddr(shiftJump),
+                    .addr(address4),
+                    .finalAddr(finalJump));
+left_shift ls(.addr(immext),
+                .newAddr(immAdd));
+
+addFull addF(.a(address4),
+        .b(immAdd),
+        .sum(immAdd4));
+//   and(andOut, branch, zero);
+  assign andOut = branch & zero;
+mux #(.WIDTH(32)) muxImm4(.sel0(address4),
+                            .sel1(immAdd4),
+                            .sel(andOut),
+                            .res(immMuxOut));
+
+    endmodule

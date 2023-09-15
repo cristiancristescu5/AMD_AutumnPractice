@@ -25,8 +25,8 @@ always @(posedge clk)begin
     end else begin 
       if(memW && !memR) begin 
         memory[address] <= data;
+        $display("la adresa: %d, salvez: %d", address, data);
       end
     end
-//   $display("la 0: %h", memory[0]);
-end
+ end
 endmodule
