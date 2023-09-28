@@ -135,7 +135,7 @@ left_shift ls(.addr(immext),
 addFull addF(.a(address4),
         .b(immAdd),
         .sum(immAdd4));
-//   and(andOut, branch, zero);
+
   assign andOut = branch & zero;
 mux #(.WIDTH(32)) muxImm4(.sel0(address4),
                             .sel1(immAdd4),
